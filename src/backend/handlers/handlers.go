@@ -54,6 +54,10 @@ func DiseaseMatch(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Sequence invalid")
 	}
 
+	if !utils.IsValidDiseaseSearchInput(query.Penyakit) {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid Penyakit Name")
+	}
+
 	var disease models.Disease
 	if disease, err = controllers.DiseaseGetOne(query.Penyakit); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
