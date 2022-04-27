@@ -8,31 +8,21 @@ function Search() {
     const [status, setStatus] = React.useState('')
     const [fail, setFail] = React.useState(false)
 
-    const validInput = /^\s*\d{2}\s+\w+\s+\d{4}\s+\w+\s*$/g
-    const validDisease = /^\s*\w+\s*$/g
-
     const fetchData = async () => {
         let data = {
             date : "",
             name : ""
         }
-        let arr = text.split(/(\s+)/).filter(function(e){return e.trim().length > 0})
-        if (validInput.test(text)) {
+        
+        let arr = text.split(" ").filter(function(e){return e.trim().length > 0})
+        if(arr.length === 3){
+            data.date = text
+        }else if(arr.length===1){
+            data.name=text
+        } else if(arr.length>3){
             data.date = arr[0] + " " + arr[1] + " " + arr[2]
-            data.name = arr[3]
-            setFail(false)
-        } else if (validDisease.test(text)) {
-            data.name = arr[0]
-            setFail(false)
-        } else if (arr.length===4){
-            let date = arr[0] + " " + arr[1] + " " + arr[2]
-            let name = arr[3]
-            if (validInput.test(text) && validDisease.test(name)) {
-                data.date = date
-                data.name = name
-                setFail(false)
-            }
-        } else {
+            data.name = arr.slice(3).join(" ")
+        } else{
             setFail(true)
         }
 
