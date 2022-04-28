@@ -74,5 +74,5 @@ func SimiliarityMatch(dna string, disease string) (bool, float32) {
 		}
 	}
 
-	return (biggestRatio > 0.8), biggestRatio
+	return (biggestRatio >= 0.8), biggestRatio
 }

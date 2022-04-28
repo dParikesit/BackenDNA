@@ -58,7 +58,7 @@ function AddDesease() {
     <>
     <div className = 'container mt-5'>
         <div className='card'>
-            <h1>Add Desease</h1>
+            <h1>Add Disease</h1>
             <Form className='form'>
                 <p className='mt-2'>Disease</p>
                 <input type="text" placeholder="Name" onChange={(e => setDesease(e.target.value)) } />
