@@ -14,7 +14,6 @@ func BMMatch(dna string, disease string) bool {
 	j = lenDisease - 1
 
 	for {
-		//fmt.Println("i: ", dna[i], "j: ", disease[j])
 		if disease[j] == dna[i] {
 			if j == 0 {
 				// After matching all the characters, if the last character of the disease is matched, then return true

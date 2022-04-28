@@ -9,7 +9,7 @@ func Min(a, b int) int {
 	return b
 }
 
-func CalculateSimiliarity(dna string, disease string) float32 {
+func CalculateLevenshteinDist(dna string, disease string) float32 {
 	var ratio float32 = 0
 	var count int = 0
 	var lenDisease = len(disease)
@@ -49,6 +49,30 @@ func CalculateSimiliarity(dna string, disease string) float32 {
 
 	var lastElement int = matrix[lenDisease][lenDna]
 	ratio = float32((totallength - lastElement)) / float32(totallength)
-	fmt.Printf("Ratio func : %f", ratio)
+	fmt.Println(ratio)
 	return ratio
+}
+
+func SimiliarityMatch(dna string, disease string) (bool, float32) {
+	// use levenshtein distance algorithm
+	lenDisease := len(disease)
+	lenDna := len(dna)
+
+	if lenDisease > lenDna {
+		return false, 0.0
+	}
+
+	var temp float32
+	var biggestRatio float32
+	biggestRatio = -0.1
+	for i := 0; i < lenDna-lenDisease; i++ {
+		first10 := dna[i : i+lenDisease]
+		temp = CalculateLevenshteinDist(first10, disease)
+
+		if temp > biggestRatio {
+			biggestRatio = temp
+		}
+	}
+
+	return (biggestRatio > 0.8), biggestRatio
 }
