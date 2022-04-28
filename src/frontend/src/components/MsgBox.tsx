@@ -18,7 +18,13 @@ function MsgBox( { show, title, text, onHide } : Props ) {
         <Modal.Header>
             <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{text}</Modal.Body>
+        <Modal.Body>
+            { 
+                text.split('\n').map((item, index) => {
+                    return <p key={index}>{item}</p>
+                })
+            }
+        </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={onHide}>
                 Close

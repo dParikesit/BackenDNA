@@ -45,7 +45,13 @@ function DNATest() {
             if(response.ok){
                 setTitle("Success");
                 let result = await response.text()
-                setText(result);
+                let arr = result.split(' ')
+                let temp = "Date: " + arr[0] + " " + arr[1] + " " + arr[2] + "\n" +
+                            "Name: " + arr[3] + "\n" +
+                            "Disease: " + arr[4] + "\n" +
+                            "Verdict: " + arr[6] + "\n" +
+                            "Similarity: " + arr[5]
+                setText(temp);
                 setShow(true);
             } else{
                 setTitle("Error");
