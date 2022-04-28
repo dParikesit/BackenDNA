@@ -22,6 +22,5 @@ type QueryMatch struct {
 }
 
 type QueryHistory struct {
-	Name string `json:"name"`
-	Date string `json:"date"`
+	Text string `json:"text"`
 }

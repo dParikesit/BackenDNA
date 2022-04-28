@@ -116,35 +116,61 @@ func HistoryQuery(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Parsing error")
 	}
 
-	if query.Date == "" {
-		if !utils.IsValidDiseaseSearchInput(query.Name) {
+	// get input text
+	var text string = query.Text
+	var arr []string = utils.SplitText(text, " ")
+	var date string
+	var name string
+
+	if !utils.IsValidInputSearch(text) {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid Search Query")
+	} else {
+		if len(arr) >= 3 {
+			date = arr[0] + " " + arr[1] + " " + arr[2]
+			if utils.IsValidDate(date) {
+				name = utils.JoinArray(arr, 3)
+			} else {
+				// date = ""
+				// name = utils.JoinArray(arr, 0)
+				return c.Status(fiber.StatusBadRequest).SendString("Invalid Date")
+			}
+		} else {
+			name = utils.JoinArray(arr, 0)
+		}
+	}
+
+	if date == "" {
+		if !utils.IsValidDiseaseSearchInput(name) {
 			return c.Status(fiber.StatusBadRequest).SendString("Invalid Name")
 		}
-		if history, err = controllers.HistoryGetByName(query.Name); err != nil {
+		if history, err = controllers.HistoryGetByName(name); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return c.Status(fiber.StatusNotFound).SendString("History not found")
 			} else {
 				return c.Status(fiber.StatusInternalServerError).SendString("History Get Error")
 			}
 		}
-	} else if query.Name == "" {
-		if history, err = controllers.HistoryGetByDate(query.Date); err != nil {
+	} else if name == "" {
+		if !utils.IsValidDate(date) {
+			return c.Status(fiber.StatusBadRequest).SendString("Invalid Date")
+		}
+		if history, err = controllers.HistoryGetByDate(date); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return c.Status(fiber.StatusNotFound).SendString("History not found")
-			} else if (err.Error()=="Invalid Date"){
+			} else if err.Error() == "Invalid Date" {
 				return c.Status(fiber.StatusInternalServerError).SendString("Invalid Date")
 			} else {
 				return c.Status(fiber.StatusInternalServerError).SendString("History Get Error")
 			}
 		}
 	} else {
-		if !utils.IsValidDiseaseSearchInput(query.Name) {
+		if !utils.IsValidDiseaseSearchInput(name) {
 			return c.Status(fiber.StatusBadRequest).SendString("Invalid Name")
 		}
-		if history, err = controllers.HistoryGetByAll(query.Name, query.Date); err != nil {
+		if history, err = controllers.HistoryGetByAll(name, date); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return c.Status(fiber.StatusNotFound).SendString("History not found")
-			} else if (err.Error()=="Invalid Date"){
+			} else if err.Error() == "Invalid Date" {
 				return c.Status(fiber.StatusInternalServerError).SendString("Invalid Date")
 			} else {
 				return c.Status(fiber.StatusInternalServerError).SendString("History Get Error")
