@@ -26,12 +26,17 @@ function Search() {
                 const arr = await response.json()
                 setRes(arr.map((item: any) => {
                     const textArr = item.split(' ')
+                    let len = textArr.length
+                    let disease = textArr[4]
+                    for (let i = 5; i < len-2; i++) {
+                        disease += ' ' + textArr[i]
+                    }
                     return {
                         date: textArr[0] +" "+ textArr[1] +" "+ textArr[2],
                         name: textArr[3],
-                        disease: textArr[4],
-                        similarity: textArr[5],
-                        verdict: textArr[6]
+                        disease: disease,
+                        similarity: textArr[len-2],
+                        verdict: textArr[len-1]
                     }
                 }))
             } else{
